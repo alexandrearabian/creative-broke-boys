@@ -1,0 +1,95 @@
+{
+  "navbar": {
+    "work": "Trabajo",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "navigation": "Navegación",
+    "theme": "Tema"
+  },
+  "home": {
+    "title": "Creative Broke Boys",
+    "subtitle": "Una agencia creativa que presenta diseño innovador y narrativa convincente",
+    "hero": {
+      "title": "Creamos",
+      "subtitle": "Soluciones Innovadoras",
+      "description": "Damos vida a tus visiones creativas con diseño de vanguardia y narrativa que cautiva y convierte.",
+      "cta": "Ver Nuestro Trabajo",
+      "ctaSecondary": "Ponte en Contacto"
+    },
+    "featured": {
+      "title": "Trabajo Destacado",
+      "description": "Descubre nuestros últimos proyectos creativos y ve cómo transformamos ideas en historias visuales convincentes."
+    },
+    "badge": "✨ Estudio de Diseño Creativo",
+    "heroTitle1": "Donde la Creatividad",
+    "heroTitle2": "Se Encuentra con la Innovación",
+    "heroDescription": "Somos un colectivo de diseñadores y narradores apasionados que transforman ideas audaces en experiencias visuales convincentes. Cada proyecto es un lienzo para la innovación, cada desafío es una oportunidad para crear algo extraordinario.",
+    "exploreWork": "Explora Nuestro Trabajo",
+    "learnAbout": "Conoce Sobre Nosotros",
+    "stats": {
+      "clients": "Clientes Felices",
+      "projects": "Proyectos Completados",
+      "rating": "Calificación Promedio",
+      "ideas": "Ideas Creativas"
+    },
+    "featuredTitle": "Proyectos Destacados",
+    "featuredDescription": "Echa un vistazo a algunos de nuestros proyectos recientes",
+    "viewProject": "Ver Proyecto",
+    "viewAllProjects": "Ver Todos los Proyectos",
+    "ctaTitle": "¿Listo para Crear Algo Increíble?",
+    "ctaDescription": "Colaboremos y demos vida a tu visión. Ya sea que estés empezando desde cero o buscando elevar tu marca existente, estamos aquí para ayudar.",
+    "startProject": "Iniciar un Proyecto",
+    "learnMore": "Saber Más"
+  },
+  "work": {
+    "title": "Nuestro Trabajo",
+    "subtitle": "Explora nuestro portafolio de proyectos creativos",
+    "description": "Desde branding audaz hasta narrativa convincente, cada proyecto representa nuestro compromiso con empujar los límites creativos y entregar resultados excepcionales.",
+    "viewOnBehance": "Ver en Behance",
+    "loading": "Cargando proyecto..."
+  },
+  "about": {
+    "title": "Acerca de Creative Broke Boys",
+    "subtitle": "Creadores apasionados, pensadores innovadores",
+    "description": "Somos un estudio creativo dinámico que cree en el poder del diseño para transformar ideas en experiencias impactantes. Nuestro equipo combina visión artística con pensamiento estratégico para entregar soluciones que resuenan.",
+    "values": {
+      "creativity": "Creatividad",
+      "innovation": "Innovación",
+      "collaboration": "Colaboración",
+      "excellence": "Excelencia"
+    },
+    "team": {
+      "title": "Conoce Nuestro Equipo",
+      "description": "Un grupo diverso de individuos talentosos unidos por nuestra pasión por la excelencia creativa."
+    }
+  },
+  "contact": {
+    "title": "Ponte en Contacto",
+    "subtitle": "Creemos algo increíble juntos",
+    "description": "¿Listo para comenzar tu próximo proyecto? Nos encantaría saber de ti. Envíanos un mensaje y hablemos sobre cómo podemos dar vida a tu visión.",
+    "form": {
+      "title": "Envíanos un mensaje",
+      "description": "Cuéntanos sobre tu proyecto y te responderemos pronto.",
+      "name": "Nombre",
+      "email": "Correo Electrónico",
+      "message": "Mensaje",
+      "send": "Enviar Mensaje"
+    },
+    "info": {
+      "title": "Información de Contacto",
+      "description": "Ponte en contacto con nosotros a través de cualquiera de estos canales.",
+      "email": "hola@creativebrokeboys.com",
+      "phone": "+1 (555) 123-4567",
+      "address": "123 Calle Creativa, Ciudad Diseño, DC 12345"
+    }
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "language": {
+    "english": "Inglés",
+    "spanish": "Español"
+  }
+}

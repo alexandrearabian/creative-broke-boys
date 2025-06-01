@@ -1,0 +1,95 @@
+{
+  "navbar": {
+    "work": "Work",
+    "about": "About Us",
+    "contact": "Contact",
+    "navigation": "Navigation",
+    "theme": "Theme"
+  },
+  "home": {
+    "title": "Creative Broke Boys",
+    "subtitle": "A creative agency showcasing innovative design and compelling storytelling",
+    "hero": {
+      "title": "We Create",
+      "subtitle": "Innovative Solutions",
+      "description": "Bringing your creative visions to life with cutting-edge design and storytelling that captivates and converts.",
+      "cta": "View Our Work",
+      "ctaSecondary": "Get In Touch"
+    },
+    "featured": {
+      "title": "Featured Work",
+      "description": "Discover our latest creative projects and see how we transform ideas into compelling visual stories."
+    },
+    "badge": "✨ Creative Design Studio",
+    "heroTitle1": "Where Creativity",
+    "heroTitle2": "Meets Innovation",
+    "heroDescription": "We are a collective of passionate designers and storytellers who transform bold ideas into compelling visual experiences. Every project is a canvas for innovation, every challenge is an opportunity to create something extraordinary.",
+    "exploreWork": "Explore Our Work",
+    "learnAbout": "Learn About Us",
+    "stats": {
+      "clients": "Happy Clients",
+      "projects": "Projects Completed",
+      "rating": "Average Rating",
+      "ideas": "Creative Ideas"
+    },
+    "featuredTitle": "Featured Projects",
+    "featuredDescription": "Check out some of our recent projects",
+    "viewProject": "View Project",
+    "viewAllProjects": "View All Projects",
+    "ctaTitle": "Ready to Create Something Amazing?",
+    "ctaDescription": "Let's collaborate and bring your vision to life. Whether you're starting from scratch or looking to elevate your existing brand, we're here to help.",
+    "startProject": "Start a Project",
+    "learnMore": "Learn More"
+  },
+  "work": {
+    "title": "Our Work",
+    "subtitle": "Explore our portfolio of creative projects",
+    "description": "From bold branding to compelling storytelling, each project represents our commitment to pushing creative boundaries and delivering exceptional results.",
+    "viewOnBehance": "View on Behance",
+    "loading": "Loading project..."
+  },
+  "about": {
+    "title": "About Creative Broke Boys",
+    "subtitle": "Passionate creators, innovative thinkers",
+    "description": "We are a dynamic creative studio that believes in the power of design to transform ideas into impactful experiences. Our team combines artistic vision with strategic thinking to deliver solutions that resonate.",
+    "values": {
+      "creativity": "Creativity",
+      "innovation": "Innovation",
+      "collaboration": "Collaboration",
+      "excellence": "Excellence"
+    },
+    "team": {
+      "title": "Meet Our Team",
+      "description": "A diverse group of talented individuals united by our passion for creative excellence."
+    }
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Let's create something amazing together",
+    "description": "Ready to start your next project? We'd love to hear from you. Drop us a line and let's discuss how we can bring your vision to life.",
+    "form": {
+      "title": "Send us a message",
+      "description": "Tell us about your project and we'll get back to you soon.",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send Message"
+    },
+    "info": {
+      "title": "Contact Information",
+      "description": "Get in touch with us through any of these channels.",
+      "email": "hello@creativebrokeboys.com",
+      "phone": "+1 (555) 123-4567",
+      "address": "123 Creative Street, Design City, DC 12345"
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "english": "English",
+    "spanish": "Spanish"
+  }
+}
