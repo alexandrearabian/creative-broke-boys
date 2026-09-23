@@ -1,95 +1,113 @@
 {
   "navbar": {
     "work": "Work",
-    "about": "About Us",
+    "about": "About",
     "contact": "Contact",
-    "navigation": "Navigation",
-    "theme": "Theme"
+    "menu": "Menu",
+    "close": "Close",
+    "available": "Taking on projects",
+    "toggleTheme": "Toggle theme",
+    "toggleLanguage": "Cambiar a español"
+  },
+  "footer": {
+    "tagline": "A creative duo making campaigns people actually talk about.",
+    "rights": "All rights reserved.",
+    "backToTop": "Back to top"
   },
   "home": {
-    "title": "Creative Broke Boys",
-    "subtitle": "A creative agency showcasing innovative design and compelling storytelling",
-    "hero": {
-      "title": "We Create",
-      "subtitle": "Innovative Solutions",
-      "description": "Bringing your creative visions to life with cutting-edge design and storytelling that captivates and converts.",
-      "cta": "View Our Work",
-      "ctaSecondary": "Get In Touch"
-    },
-    "featured": {
-      "title": "Featured Work",
-      "description": "Discover our latest creative projects and see how we transform ideas into compelling visual stories."
-    },
-    "badge": "✨ Creative Design Studio",
-    "heroTitle1": "Where Creativity",
-    "heroTitle2": "Meets Innovation",
-    "heroDescription": "We are a collective of passionate designers and storytellers who transform bold ideas into compelling visual experiences. Every project is a canvas for innovation, every challenge is an opportunity to create something extraordinary.",
-    "exploreWork": "Explore Our Work",
-    "learnAbout": "Learn About Us",
-    "stats": {
-      "clients": "Happy Clients",
-      "projects": "Projects Completed",
-      "rating": "Average Rating",
-      "ideas": "Creative Ideas"
-    },
-    "featuredTitle": "Featured Projects",
-    "featuredDescription": "Check out some of our recent projects",
-    "viewProject": "View Project",
-    "viewAllProjects": "View All Projects",
-    "ctaTitle": "Ready to Create Something Amazing?",
-    "ctaDescription": "Let's collaborate and bring your vision to life. Whether you're starting from scratch or looking to elevate your existing brand, we're here to help.",
-    "startProject": "Start a Project",
-    "learnMore": "Learn More"
+    "eyebrow": "Creative duo · Campaigns, branding, digital",
+    "heroLine1": "Two creatives.",
+    "heroLine2": "Big ideas,",
+    "heroAccent": "small budgets.",
+    "heroDescription": "We're a copy and art team. We make campaigns that get people talking, and we've learned to do it without waiting for a big budget to show up.",
+    "cta": "See the work",
+    "ctaSecondary": "Say hello",
+    "selectedTitle": "Selected work",
+    "viewAll": "All projects",
+    "duoEyebrow": "The duo",
+    "duoTitle": "One writes, one designs.",
+    "duoAccent": "Both argue.",
+    "duoBody": "Every idea gets pulled apart by two people before it reaches you. What survives is sharper, simpler and harder to ignore.",
+    "duoLink": "More about us",
+    "ctaTitle": "Got a brief?",
+    "ctaAccent": "Or just a hunch?",
+    "ctaBody": "Tell us what you're working on. We read every message.",
+    "ctaButton": "Start a project"
   },
   "work": {
-    "title": "Our Work",
-    "subtitle": "Explore our portfolio of creative projects",
-    "description": "From bold branding to compelling storytelling, each project represents our commitment to pushing creative boundaries and delivering exceptional results.",
+    "eyebrow": "Portfolio",
+    "title": "Work that",
+    "accent": "got noticed.",
+    "description": "Campaigns, brand work and digital pieces, from Young Lions entries to briefs for banks and telcos.",
+    "all": "All",
     "viewOnBehance": "View on Behance",
-    "loading": "Loading project..."
+    "empty": "Nothing in this category yet.",
+    "categories": {
+      "campaign": "Campaigns",
+      "branding": "Branding",
+      "digital": "Digital",
+      "interactive": "Interactive"
+    }
   },
   "about": {
-    "title": "About Creative Broke Boys",
-    "subtitle": "Passionate creators, innovative thinkers",
-    "description": "We are a dynamic creative studio that believes in the power of design to transform ideas into impactful experiences. Our team combines artistic vision with strategic thinking to deliver solutions that resonate.",
-    "values": {
-      "creativity": "Creativity",
-      "innovation": "Innovation",
-      "collaboration": "Collaboration",
-      "excellence": "Excellence"
+    "eyebrow": "About",
+    "title": "Broke on budget.",
+    "accent": "Rich in ideas.",
+    "description": "Creative Broke Boys is a two-person creative team. We work on campaigns, brand identities and digital pieces, and we handle the whole thing ourselves: strategy, copy, art and production.",
+    "storyTitle": "Our story",
+    "story1": "We started with a simple conviction: the most interesting work often comes from constraints, not from unlimited resources.",
+    "story2": "The best ideas don't come from the biggest budgets. They come from understanding people, taking a clear position and being willing to push an idea further than feels comfortable.",
+    "story3": "Today we work with brands and people who agree. We're broke, sure. We're also rewriting what a small team can pull off.",
+    "duoTitle": "The two of us",
+    "processTitle": "How we work",
+    "steps": {
+      "listen": "Listen",
+      "listenBody": "We start with your business problem, not with a moodboard.",
+      "insight": "Find the insight",
+      "insightBody": "The small human truth that makes an idea land.",
+      "make": "Make it",
+      "makeBody": "Copy and art built together from day one, not handed across a desk.",
+      "launch": "Put it out there",
+      "launchBody": "We adapt the idea to every channel it needs to live on."
     },
-    "team": {
-      "title": "Meet Our Team",
-      "description": "A diverse group of talented individuals united by our passion for creative excellence."
+    "ctaTitle": "Want to work",
+    "ctaAccent": "with us?",
+    "ctaButton": "Get in touch",
+    "roles": {
+      "copy": "Copywriter & strategist",
+      "art": "Art director & designer",
+      "copyBio": "Finds the angle, writes the line, defends it in the meeting.",
+      "artBio": "Turns the line into something you can't scroll past."
     }
   },
   "contact": {
-    "title": "Get In Touch",
-    "subtitle": "Let's create something amazing together",
-    "description": "Ready to start your next project? We'd love to hear from you. Drop us a line and let's discuss how we can bring your vision to life.",
+    "eyebrow": "Contact",
+    "title": "Let's make",
+    "accent": "something loud.",
+    "description": "Tell us about the brand, the problem and the deadline. The rest we can figure out together.",
     "form": {
-      "title": "Send us a message",
-      "description": "Tell us about your project and we'll get back to you soon.",
       "name": "Name",
+      "namePlaceholder": "Who are you?",
       "email": "Email",
-      "message": "Message",
-      "send": "Send Message"
+      "emailPlaceholder": "you@company.com",
+      "company": "Company",
+      "companyPlaceholder": "Optional",
+      "message": "Project",
+      "messagePlaceholder": "What are you working on?",
+      "send": "Send message",
+      "sent": "Your email app should open with the message ready. If it doesn't, write to us at the address on the right."
     },
-    "info": {
-      "title": "Contact Information",
-      "description": "Get in touch with us through any of these channels.",
-      "email": "hello@creativebrokeboys.com",
-      "phone": "+1 (555) 123-4567",
-      "address": "123 Creative Street, Design City, DC 12345"
+    "emailLabel": "Rather write directly?",
+    "copy": "Copy",
+    "copied": "Copied",
+    "faqTitle": "Before you ask",
+    "faq": {
+      "q1": "How soon can we start?",
+      "a1": "Most projects kick off within one to two weeks of our first call.",
+      "q2": "How long does a project take?",
+      "a2": "It depends on the scope. Most run between four and twelve weeks.",
+      "q3": "Do you work with clients abroad?",
+      "a3": "Yes. We work remotely and in both English and Spanish."
     }
-  },
-  "theme": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
-  },
-  "language": {
-    "english": "English",
-    "spanish": "Spanish"
   }
 }

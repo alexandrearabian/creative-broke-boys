@@ -1,38 +1,81 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuLink,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import { ModeToggle } from "./mode-toggle";
-import { LanguageToggle } from "./language-toggle";
 import { useTheme } from "next-themes";
-import { useTranslations } from "@/contexts/LanguageContext";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "motion/react";
+import { Moon, Sun } from "lucide-react";
+import { useLanguage, useTranslations } from "@/contexts/LanguageContext";
+import { ease } from "@/components/motion";
 import { cn } from "@/lib/utils";
 
+function ThemeToggle() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const t = useTranslations("navbar");
+  return (
+    <button
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      aria-label={t("toggleTheme")}
+      className="hover:bg-foreground/5 relative grid size-9 place-items-center rounded-full transition-colors"
+    >
+      <Sun className="size-4 transition-transform duration-500 dark:scale-0 dark:-rotate-90" />
+      <Moon className="absolute size-4 scale-0 rotate-90 transition-transform duration-500 dark:scale-100 dark:rotate-0" />
+    </button>
+  );
+}
+
+function LanguageToggle() {
+  const { locale, setLocale, t } = useLanguage();
+  return (
+    <button
+      onClick={() => setLocale(locale === "en" ? "es" : "en")}
+      aria-label={t("navbar.toggleLanguage")}
+      className="hover:bg-foreground/5 flex h-9 items-center gap-1 rounded-full px-3 text-xs font-semibold tracking-wider transition-colors"
+    >
+      {(["en", "es"] as const).map((l, i) => (
+        <span key={l} className="flex items-center gap-1">
+          {i > 0 && <span className="text-muted-foreground/50">/</span>}
+          <span
+            className={cn(
+              "uppercase transition-colors",
+              locale === l ? "text-foreground" : "text-muted-foreground/60",
+            )}
+          >
+            {l}
+          </span>
+        </span>
+      ))}
+    </button>
+  );
+}
+
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { theme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const t = useTranslations("navbar");
+  const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
 
-  // After hydration, we have access to the theme
+  // Hide while scrolling down, reveal on any upward scroll.
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setScrolled(y > 24);
+    setHidden(y > prev && y > 160);
+  });
+
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+    document.body.style.overflow = open ? "hidden" : "";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const navItems = [
     { href: "/work", label: t("work") },
@@ -40,245 +83,145 @@ export function Navbar() {
     { href: "/contact", label: t("contact") },
   ];
 
-  const DesktopNav = () => (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.25, 0.25, 1] }}
-      className="sticky top-0 left-0 z-50 w-full"
-    >
-      <NavigationMenu className="glass-morphism hidden max-w-full px-8 py-2 shadow-lg backdrop-blur-xl md:flex md:justify-between">
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              <Link href="/" className="flex items-center space-x-2">
-                <div className="font-display from-primary via-primary/80 to-secondary bg-gradient-to-r bg-clip-text text-2xl font-bold tracking-tight text-transparent">
-                  Creative Broke Boys
-                </div>
-              </Link>
-            </motion.div>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-
-        <NavigationMenuList className="flex h-16 justify-between gap-6">
-          <NavigationMenuItem>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              <LanguageToggle />
-            </motion.div>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              <ModeToggle />
-            </motion.div>
-          </NavigationMenuItem>
-          {navItems.map((item, index) => (
-            <NavigationMenuItem key={index}>
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link href={item.href} legacyBehavior passHref>
-                  <NavigationMenuLink
-                    className={cn(
-                      navigationMenuTriggerStyle(),
-                      "hover:text-primary focus:text-primary relative rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105",
-                      pathname === item.href
-                        ? "text-primary bg-primary/10"
-                        : "text-foreground/70 hover:bg-primary/5",
-                    )}
-                  >
-                    {item.label}
-                  </NavigationMenuLink>
-                </Link>
-              </motion.div>
-            </NavigationMenuItem>
-          ))}
-        </NavigationMenuList>
-      </NavigationMenu>
-    </motion.div>
-  );
-
-  const MobileNav = () => (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="sticky top-0 left-0 z-50 w-full md:hidden"
-    >
-      {/* Fixed header that doesn't animate */}
-      <div className="glass-morphism flex h-16 items-center justify-between px-4 shadow-lg backdrop-blur-xl">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 400, damping: 17 }}
-        >
-          <Link href="/">
-            <div className="font-display from-primary via-primary/80 to-secondary bg-gradient-to-r bg-clip-text text-xl font-bold tracking-tight text-transparent">
-              Creative Broke Boys
-            </div>
+  return (
+    <>
+      <motion.header
+        animate={{ y: hidden && !open ? "-100%" : 0 }}
+        transition={{ duration: 0.4, ease }}
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,border-color,backdrop-filter] duration-300",
+          scrolled &&
+            !open &&
+            "bg-background/75 border-border backdrop-blur-xl backdrop-saturate-150",
+        )}
+      >
+        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:h-20 md:px-8">
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="group flex items-baseline gap-1.5 text-lg font-bold tracking-tight"
+          >
+            <span>Creative Broke Boys</span>
+            <span className="bg-primary size-2 rounded-full transition-transform duration-300 group-hover:scale-150" />
           </Link>
-        </motion.div>
-        <div className="flex items-center space-x-3">
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            onClick={(e) => e.stopPropagation()}
-          >
+
+          <div className="hidden items-center gap-1 md:flex">
+            <ul className="mr-4 flex items-center gap-1">
+              {navItems.map((item) => {
+                const active = pathname === item.href;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "relative block px-4 py-2 text-sm font-medium transition-colors",
+                        active
+                          ? "text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {item.label}
+                      {active && (
+                        <motion.span
+                          layoutId="nav-active"
+                          className="bg-primary absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full"
+                          transition={{
+                            type: "spring",
+                            stiffness: 380,
+                            damping: 32,
+                          }}
+                        />
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
             <LanguageToggle />
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ModeToggle />
-          </motion.div>
-          <motion.button
-            className="hover:bg-primary/10 rounded-lg p-2 transition-colors"
-            onClick={toggleSidebar}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          >
-            <motion.div
-              animate={{ rotate: isOpen ? 90 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {isOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </motion.div>
-          </motion.button>
-        </div>
-      </div>
+            <ThemeToggle />
+          </div>
 
-      {/* Menu overlay and content */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              className="bg-background/40 fixed inset-0 z-40 backdrop-blur-md"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={toggleSidebar}
-              style={{ top: "64px" }}
-            />
-
-            <motion.div
-              className="glass-morphism elegant-shadow-lg fixed bottom-0 left-1/2 z-50 h-[75vh] w-[92%] max-w-md -translate-x-1/2 overflow-y-auto rounded-t-3xl p-8"
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "100%", opacity: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-              }}
-              onClick={(e) => e.stopPropagation()}
+          <div className="flex items-center gap-1 md:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              className="ml-1 h-9 rounded-full px-3 text-sm font-medium"
             >
-              <motion.nav
-                className="mt-6 flex flex-col space-y-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <motion.div
-                  className="mb-6 text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={open ? "close" : "menu"}
+                  initial={{ y: 8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -8, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="block"
                 >
-                  <h3 className="font-display from-primary to-secondary bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent">
-                    Navigation
-                  </h3>
-                </motion.div>
+                  {open ? t("close") : t("menu")}
+                </motion.span>
+              </AnimatePresence>
+            </button>
+          </div>
+        </nav>
+      </motion.header>
 
-                {navItems.map((item, index) => (
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-menu"
+            className="bg-background fixed inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-10 md:hidden"
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            exit={{ clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.6, ease }}
+          >
+            <ul className="space-y-2">
+              {navItems.map((item, i) => (
+                <li key={item.href} className="overflow-hidden">
                   <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.2 + index * 0.1,
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 25,
-                    }}
-                    whileHover={{ scale: 1.02, x: 5 }}
-                    whileTap={{ scale: 0.98 }}
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: "100%" }}
+                    transition={{ duration: 0.6, ease, delay: 0.15 + i * 0.07 }}
                   >
                     <Link
                       href={item.href}
+                      onClick={() => setOpen(false)}
                       className={cn(
-                        "elegant-shadow block rounded-2xl px-6 py-4 text-xl font-medium transition-all duration-300",
-                        pathname === item.href
-                          ? "text-primary bg-primary/15 shadow-lg"
-                          : "text-foreground/80 hover:text-primary hover:bg-primary/10",
+                        "flex items-baseline gap-4 text-6xl font-bold tracking-tighter",
+                        pathname === item.href && "text-primary",
                       )}
-                      onClick={toggleSidebar}
                     >
-                      <span className="font-display">{item.label}</span>
+                      <span className="text-muted-foreground text-sm font-medium tracking-normal tabular-nums">
+                        0{i + 1}
+                      </span>
+                      {item.label}
                     </Link>
                   </motion.div>
-                ))}
-
-                {/* Mobile theme toggle inside menu */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 }}
-                  className="border-border/20 border-t pt-8"
-                >
-                  <div className="text-center">
-                    <p className="text-muted-foreground mb-4 text-sm font-medium">
-                      Theme
-                    </p>
-                    <div className="flex justify-center space-x-3">
-                      <LanguageToggle />
-                      <ModeToggle />
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.nav>
+                </li>
+              ))}
+            </ul>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex items-center justify-between"
+            >
+              <p className="text-muted-foreground flex items-center gap-2 text-sm">
+                <span className="relative flex size-2">
+                  <span className="bg-primary absolute inline-flex size-full animate-ping rounded-full opacity-60" />
+                  <span className="bg-primary relative inline-flex size-2 rounded-full" />
+                </span>
+                {t("available")}
+              </p>
+              <LanguageToggle />
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
-  );
-
-  // If you're pre-rendering, don't show the navbar until mounting is complete
-  if (!mounted) {
-    return null;
-  }
-
-  return (
-    <>
-      <DesktopNav />
-      <MobileNav />
     </>
   );
 }

@@ -1,36 +1,42 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Epilogue, Playfair_Display, Fraunces } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Serif } from "next/font/google";
+import { MotionConfig } from "motion/react";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
-const epilogue = Epilogue({
+const grotesk = Bricolage_Grotesque({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-grotesk",
 });
 
-const playfairDisplay = Playfair_Display({
+const instrument = Instrument_Serif({
   subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-serif",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-display",
+  variable: "--font-instrument",
 });
 
 export const metadata: Metadata = {
-  title: "Creative Broke Boys",
+  title: {
+    default: "Creative Broke Boys · Creative duo",
+    template: "%s · Creative Broke Boys",
+  },
   description:
-    "A creative agency showcasing innovative design and compelling storytelling",
+    "A copy and art creative duo making campaigns, brand identities and digital work.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  openGraph: {
+    title: "Creative Broke Boys",
+    description: "Two creatives. Big ideas, small budgets.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -40,24 +46,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${epilogue.variable} ${playfairDisplay.variable} ${fraunces.variable}`}
-      >
-        <LanguageProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <TRPCReactProvider>
-              <Navbar />
-              {children}
-            </TRPCReactProvider>
-          </ThemeProvider>
-        </LanguageProvider>
-        <div className="bg-[linear-gradient(to_right,theme(colors.primary/10%)_1px,transparent_1px),linear-gradient(to_bottom,theme(colors.primary/10%)_1px,transparent_1px)] pointer-events-none fixed inset-0 -z-50 bg-[size:24px_24px]"></div>
-        <div className="from-background via-background/20 to-background pointer-events-none fixed inset-0 -z-50 bg-gradient-to-b"></div>
+      <body className={`${grotesk.variable} ${instrument.variable}`}>
+        <a
+          href="#main"
+          className="bg-primary text-primary-foreground sr-only z-[60] rounded-full px-4 py-2 focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+        >
+          Skip to content
+        </a>
+        <MotionConfig reducedMotion="user">
+          <LanguageProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <TRPCReactProvider>
+                <Navbar />
+                <main id="main">{children}</main>
+                <Footer />
+              </TRPCReactProvider>
+            </ThemeProvider>
+          </LanguageProvider>
+        </MotionConfig>
       </body>
     </html>
   );

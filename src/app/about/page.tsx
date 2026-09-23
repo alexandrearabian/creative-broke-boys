@@ -1,517 +1,150 @@
 "use client";
 
-import { motion } from "motion/react";
-import {
-  Users,
-  Target,
-  Lightbulb,
-  Heart,
-  Zap,
-  Palette,
-  Coffee,
-  Star,
-  Award,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { useTranslations } from "@/contexts/LanguageContext";
+import {
+  Eyebrow,
+  MaskLine,
+  PillArrow,
+  Reveal,
+  pillClass,
+} from "@/components/motion";
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: [0.25, 0.25, 0.25, 1] },
-};
+// TODO: swap in the real names (and photos, if you want them).
+const duo = [
+  { name: "Ramiro Daneloglu", initials: "RD", role: "copy" },
+  { name: "Toto Conde", initials: "TC", role: "art" },
+] as const;
 
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const scaleIn = {
-  initial: { opacity: 0, scale: 0.8 },
-  animate: { opacity: 1, scale: 1 },
-  transition: { duration: 0.5, ease: "easeOut" },
-};
+const steps = ["listen", "insight", "make", "launch"] as const;
 
 export default function AboutPage() {
   const t = useTranslations("about");
 
-  const values = [
-    {
-      icon: Lightbulb,
-      title: t("values.creativity"),
-      description: "We push creative boundaries to deliver unique solutions",
-    },
-    {
-      icon: Target,
-      title: t("values.innovation"),
-      description:
-        "Innovation drives everything we do, from concept to execution",
-    },
-    {
-      icon: Users,
-      title: t("values.collaboration"),
-      description: "We believe the best results come from working together",
-    },
-    {
-      icon: Award,
-      title: t("values.excellence"),
-      description:
-        "We never settle for good enough - excellence is our standard",
-    },
-  ];
-
-  const team = [
-    {
-      name: "Alex Rodriguez",
-      role: "Creative Director",
-      bio: "Visionary leader with 8+ years crafting memorable brand experiences",
-      avatar: "🎨",
-      skills: ["Strategy", "Branding", "Leadership"],
-    },
-    {
-      name: "Jamie Chen",
-      role: "Lead Designer",
-      bio: "Digital artist passionate about creating stunning visual narratives",
-      avatar: "✨",
-      skills: ["UI/UX", "Visual Design", "Motion"],
-    },
-    {
-      name: "Morgan Taylor",
-      role: "Creative Strategist",
-      bio: "Strategic thinker who transforms insights into compelling campaigns",
-      avatar: "🚀",
-      skills: ["Strategy", "Campaigns", "Analytics"],
-    },
-  ];
-
-  const stats = [
-    { icon: Star, value: "150+", label: "Projects Delivered" },
-    { icon: Users, value: "50+", label: "Happy Clients" },
-    { icon: Coffee, value: "1000+", label: "Cups of Coffee" },
-    { icon: Zap, value: "5", label: "Years Experience" },
-  ];
-
   return (
-    <div className="min-h-screen pt-8">
-      {/* Hero Section */}
-      <section className="px-6 py-16 md:py-24">
-        <div className="container mx-auto max-w-7xl">
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            animate="animate"
-            className="space-y-8 text-center"
-          >
-            <motion.div variants={fadeInUp} className="space-y-4">
-              <Badge
-                variant="secondary"
-                className="bg-primary/10 text-primary border-primary/20 mx-auto px-4 py-2 text-sm font-medium"
-              >
-                <motion.span
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  👋 Meet the Team
-                </motion.span>
-              </Badge>
+    <div className="mx-auto max-w-7xl px-5 pt-36 md:px-8 md:pt-48">
+      {/* Hero */}
+      <header>
+        <Reveal>
+          <Eyebrow>{t("eyebrow")}</Eyebrow>
+        </Reveal>
+        <h1 className="mt-6 text-[clamp(3rem,9vw,8rem)] leading-[0.9] font-bold">
+          <MaskLine delay={0.1}>{t("title")}</MaskLine>
+          <MaskLine delay={0.2} className="serif-accent text-primary">
+            {t("accent")}
+          </MaskLine>
+        </h1>
+        <Reveal delay={0.35} className="mt-12 md:ml-[41.666%]">
+          <p className="max-w-xl text-xl leading-relaxed md:text-2xl">
+            {t("description")}
+          </p>
+        </Reveal>
+      </header>
 
-              <motion.h1
-                className="font-display text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              >
-                <span className="from-foreground via-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
-                  We Are Creative
-                </span>
-                <br />
-                <span className="from-primary via-secondary to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                  Broke Boys
-                </span>
-              </motion.h1>
-            </motion.div>
-
-            <motion.p
-              variants={fadeInUp}
-              className="text-muted-foreground mx-auto max-w-3xl text-lg leading-relaxed md:text-xl"
-            >
-              {t("description")}
-            </motion.p>
-          </motion.div>
+      {/* Story */}
+      <section className="mt-32 grid gap-10 md:mt-48 md:grid-cols-12">
+        <div className="md:col-span-4">
+          <h2 className="text-4xl font-bold md:sticky md:top-32 md:text-5xl">
+            <MaskLine>{t("storyTitle")}</MaskLine>
+          </h2>
         </div>
-
-        {/* Floating Elements */}
-        <motion.div
-          className="bg-primary/10 absolute top-32 left-16 h-20 w-20 rounded-full blur-xl"
-          animate={{
-            y: [0, -25, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="bg-secondary/10 absolute right-16 bottom-32 h-32 w-32 rounded-full blur-xl"
-          animate={{
-            y: [0, 25, 0],
-            scale: [1, 0.8, 1],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto max-w-7xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="grid grid-cols-2 gap-8 md:grid-cols-4"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="glass-morphism elegant-shadow space-y-3 rounded-2xl p-6 text-center"
-              >
-                <motion.div
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                  className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full"
-                >
-                  <stat.icon className="text-primary h-6 w-6" />
-                </motion.div>
-                <motion.div
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.1 + 0.3,
-                    type: "spring",
-                  }}
-                  className="font-display text-primary text-2xl font-bold md:text-3xl"
-                >
-                  {stat.value}
-                </motion.div>
-                <p className="text-muted-foreground text-sm font-medium">
-                  {stat.label}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Our Story Section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto max-w-6xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8 }}
-            className="mb-16 space-y-4 text-center"
-          >
-            <motion.h2
-              className="font-display text-3xl font-bold tracking-tight md:text-5xl"
-              whileHover={{ scale: 1.02 }}
+        <ol className="space-y-12 md:col-span-7 md:col-start-6">
+          {(["story1", "story2", "story3"] as const).map((k, i) => (
+            <Reveal
+              as="li"
+              key={k}
+              delay={i * 0.08}
+              className="border-border flex gap-6 border-t pt-6"
             >
-              <span className="from-primary via-secondary to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                Our Story
+              <span className="text-primary serif-accent text-2xl">
+                {i + 1}.
               </span>
-            </motion.h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-              Born from the belief that creativity should never be limited by
-              budget
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="glass-morphism elegant-shadow-lg rounded-3xl p-8 md:p-12"
-          >
-            <div className="text-muted-foreground space-y-6 text-lg leading-relaxed">
-              <motion.p
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                Creative Broke Boys was founded on a simple yet revolutionary
-                idea: that the most innovative and impactful creative work often
-                comes from constraints, not unlimited resources. We embrace the
-                challenge of creating extraordinary results with creative
-                resourcefulness.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                Our journey began when a group of passionate creatives realized
-                that the best ideas don&apos;t come from the biggest budgets -
-                they come from the biggest hearts, the sharpest minds, and the
-                willingness to push creative boundaries regardless of financial
-                constraints.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                Today, we work with brands and individuals who share our belief
-                that creativity, strategy, and authentic storytelling can
-                achieve more than any budget ever could. We&apos;re not just
-                broke - we&apos;re breaking the rules of what&apos;s possible.
-              </motion.p>
-            </div>
-          </motion.div>
-        </div>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                {t(k)}
+              </p>
+            </Reveal>
+          ))}
+        </ol>
       </section>
 
-      {/* Values Section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto max-w-7xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8 }}
-            className="mb-16 space-y-4 text-center"
-          >
-            <motion.h2
-              className="font-display text-3xl font-bold tracking-tight md:text-5xl"
-              whileHover={{ scale: 1.02 }}
+      {/* Duo */}
+      <section className="mt-32 md:mt-48">
+        <h2 className="mb-12 text-4xl font-bold md:text-5xl">
+          <MaskLine>{t("duoTitle")}</MaskLine>
+        </h2>
+        <div className="grid gap-6 md:grid-cols-2">
+          {duo.map((m, i) => (
+            <Reveal
+              key={m.name}
+              delay={i * 0.1}
+              className={i ? "md:mt-20" : ""}
             >
-              <span className="from-primary via-secondary to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                Our Values
-              </span>
-            </motion.h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-              The principles that guide everything we create
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-8 md:grid-cols-2"
-          >
-            {values.map((value, index) => (
-              <motion.div
-                key={index}
-                variants={scaleIn}
-                whileHover={{ scale: 1.03, y: -5 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="glass-morphism elegant-shadow-lg space-y-4 rounded-2xl p-8"
-              >
-                <motion.div
-                  whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
-                  className="bg-primary/10 flex h-16 w-16 items-center justify-center rounded-2xl"
-                >
-                  <value.icon className="text-primary h-8 w-8" />
-                </motion.div>
-
-                <motion.h3
-                  className="font-display text-foreground text-xl font-bold"
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  {value.title}
-                </motion.h3>
-
-                <p className="text-muted-foreground leading-relaxed">
-                  {value.description}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto max-w-7xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8 }}
-            className="mb-16 space-y-4 text-center"
-          >
-            <motion.h2
-              className="font-display text-3xl font-bold tracking-tight md:text-5xl"
-              whileHover={{ scale: 1.02 }}
-            >
-              <span className="from-primary via-secondary to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                Meet the Team
-              </span>
-            </motion.h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-              The creative minds behind the magic
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-8 md:grid-cols-3"
-          >
-            {team.map((member, index) => (
-              <motion.div
-                key={index}
-                variants={scaleIn}
-                whileHover={{ scale: 1.03, y: -10 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="glass-morphism elegant-shadow-lg space-y-6 rounded-2xl p-8 text-center"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="from-primary/20 to-secondary/20 mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br text-3xl"
-                >
-                  {member.avatar}
-                </motion.div>
-
-                <div className="space-y-2">
-                  <motion.h3
-                    className="font-display text-foreground text-xl font-bold"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    {member.name}
-                  </motion.h3>
-                  <p className="text-primary font-medium">{member.role}</p>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {member.bio}
-                  </p>
+              <article className="group bg-card relative overflow-hidden rounded-2xl p-8 md:p-10">
+                <div className="bg-foreground text-background group-hover:bg-primary grid size-20 place-items-center rounded-[1.4rem] text-2xl font-bold tracking-tight transition-[background-color,border-radius] duration-500 group-hover:rounded-[2.5rem]">
+                  {m.initials}
                 </div>
-
-                <div className="flex flex-wrap justify-center gap-2">
-                  {member.skills.map((skill, skillIndex) => (
-                    <motion.div
-                      key={skillIndex}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Badge
-                        variant="secondary"
-                        className="bg-primary/10 text-primary border-primary/20 text-xs"
-                      >
-                        {skill}
-                      </Badge>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                <h3 className="mt-16 text-3xl font-bold md:text-4xl">
+                  {m.name}
+                </h3>
+                <p className="serif-accent text-primary mt-1 text-2xl">
+                  {t(`roles.${m.role}`)}
+                </p>
+                <p className="text-muted-foreground mt-6 max-w-sm leading-relaxed">
+                  {t(`roles.${m.role}Bio`)}
+                </p>
+                <span
+                  aria-hidden
+                  className="text-foreground/5 absolute -right-4 -bottom-10 text-[10rem] leading-none font-bold tracking-tighter transition-transform duration-700 group-hover:-translate-x-4"
+                >
+                  {i ? "Art" : "Copy"}
+                </span>
+              </article>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="px-6 py-16 md:py-24">
-        <div className="container mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="glass-morphism elegant-shadow-lg relative overflow-hidden rounded-3xl p-8 text-center md:p-12"
-          >
-            <motion.div
-              className="bg-primary/10 absolute -top-10 -right-10 h-32 w-32 rounded-full blur-2xl"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-
-            <motion.h2
-              className="font-display mb-6 text-3xl font-bold md:text-4xl"
-              whileHover={{ scale: 1.02 }}
+      {/* Process */}
+      <section className="mt-32 md:mt-48">
+        <h2 className="mb-12 text-4xl font-bold md:text-5xl">
+          <MaskLine>{t("processTitle")}</MaskLine>
+        </h2>
+        <ol>
+          {steps.map((s, i) => (
+            <Reveal
+              as="li"
+              key={s}
+              delay={i * 0.06}
+              className="group border-border hover:bg-card grid gap-2 border-t py-8 transition-colors duration-300 md:grid-cols-12 md:items-baseline md:px-4"
             >
-              <span className="from-primary via-secondary to-primary bg-gradient-to-r bg-clip-text text-transparent">
-                Ready to Join Our Journey?
+              <span className="text-muted-foreground text-sm font-medium tabular-nums md:col-span-1">
+                0{i + 1}
               </span>
-            </motion.h2>
+              <h3 className="text-3xl font-bold transition-transform duration-500 group-hover:translate-x-2 md:col-span-5 md:text-4xl">
+                {t(`steps.${s}`)}
+              </h3>
+              <p className="text-muted-foreground text-lg md:col-span-5 md:col-start-8">
+                {t(`steps.${s}Body`)}
+              </p>
+            </Reveal>
+          ))}
+        </ol>
+      </section>
 
-            <motion.p
-              className="text-muted-foreground mx-auto mb-8 max-w-2xl text-lg"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              Whether you&apos;re looking to collaborate, join our team, or
-              simply want to chat about creative possibilities, we&apos;d love
-              to hear from you.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col justify-center gap-4 sm:flex-row"
-            >
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  size="lg"
-                  className="elegant-shadow rounded-full px-8 py-6 text-lg"
-                >
-                  Get in Touch
-                  <Palette className="ml-2 h-5 w-5" />
-                </Button>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="elegant-shadow rounded-full px-8 py-6 text-lg"
-                >
-                  View Our Work
-                </Button>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
+      {/* CTA */}
+      <section className="border-border mt-32 border-t pt-24 md:mt-48">
+        <h2 className="text-[clamp(3rem,8vw,7rem)] leading-[0.9] font-bold">
+          <MaskLine>{t("ctaTitle")}</MaskLine>
+          <MaskLine delay={0.1} className="serif-accent text-primary">
+            {t("ctaAccent")}
+          </MaskLine>
+        </h2>
+        <Reveal delay={0.2} className="mt-12">
+          <Link href="/contact" className={pillClass}>
+            {t("ctaButton")}
+            <PillArrow />
+          </Link>
+        </Reveal>
       </section>
     </div>
   );

@@ -42,6 +42,10 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     setIsInitialized(true);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
     setStoredLocale(newLocale);
