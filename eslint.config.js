@@ -1,48 +1,30 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import tseslint from "typescript-eslint";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-});
-
-export default tseslint.config(
+/** @type {import("eslint").Linter.Config[]} */
+const eslintConfig = [
   {
-    ignores: [".next"],
+    ignores: [
+      ".next/**",
+      "out/**",
+      "build/**",
+      "node_modules/**",
+      "next-env.d.ts",
+      "postcss.config.js",
+      "prettier.config.js",
+    ],
   },
-  ...compat.extends("next/core-web-vitals"),
+  ...nextVitals,
+  ...nextTs,
   {
     files: ["**/*.ts", "**/*.tsx"],
-    extends: [
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
-      ...tseslint.configs.stylisticTypeChecked,
-    ],
     rules: {
-      "@typescript-eslint/array-type": "off",
-      "@typescript-eslint/consistent-type-definitions": "off",
-      "@typescript-eslint/consistent-type-imports": [
-        "warn",
-        { prefer: "type-imports", fixStyle: "inline-type-imports" },
-      ],
       "@typescript-eslint/no-unused-vars": [
         "warn",
         { argsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/require-await": "off",
-      "@typescript-eslint/no-misused-promises": [
-        "error",
-        { checksVoidReturn: { attributes: false } },
-      ],
     },
   },
-  {
-    linterOptions: {
-      reportUnusedDisableDirectives: true,
-    },
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
-    },
-  },
-);
+];
+
+export default eslintConfig;
