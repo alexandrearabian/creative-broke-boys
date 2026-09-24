@@ -95,14 +95,16 @@ export function Navbar() {
             "bg-background/75 border-border backdrop-blur-xl backdrop-saturate-150",
         )}
       >
-        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:h-20 md:px-8">
+        <nav className="flex h-16 items-center justify-between px-5 md:h-20 md:px-8">
           <Link
             href="/"
             onClick={() => setOpen(false)}
-            className="group flex items-baseline gap-1.5 text-lg font-bold tracking-tight"
+            className="display group text-xl"
           >
-            <span>Creative Broke Boys</span>
-            <span className="bg-primary size-2 rounded-full transition-transform duration-300 group-hover:scale-150" />
+            Creative Broke Boys
+            <span className="text-primary inline-block transition-transform duration-500 group-hover:rotate-180">
+              *
+            </span>
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">
@@ -190,13 +192,10 @@ export function Navbar() {
                       href={item.href}
                       onClick={() => setOpen(false)}
                       className={cn(
-                        "flex items-baseline gap-4 text-6xl font-bold tracking-tighter",
+                        "display block text-7xl",
                         pathname === item.href && "text-primary",
                       )}
                     >
-                      <span className="text-muted-foreground text-sm font-medium tracking-normal tabular-nums">
-                        0{i + 1}
-                      </span>
                       {item.label}
                     </Link>
                   </motion.div>

@@ -1,66 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslations } from "@/contexts/LanguageContext";
-import { behanceEmbed, behanceUrl, type Project } from "@/lib/projects";
+import { behanceUrl, coverUrl, type Project } from "@/lib/projects";
+import { ease } from "@/components/motion";
 import { cn } from "@/lib/utils";
+
+/** Project cover, or a type-only tile when Behance has no public cover. */
+export function Cover({
+  project,
+  sizes,
+  priority,
+  className,
+}: {
+  project: Project;
+  sizes: string;
+  priority?: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={cn("bg-card relative overflow-hidden", className)}>
+      {project.cover ? (
+        <Image
+          src={coverUrl(project.cover)}
+          alt={project.title}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className="object-cover"
+        />
+      ) : (
+        <div className="grid size-full place-items-center p-6">
+          <span className="display text-center text-4xl leading-[0.9] md:text-6xl">
+            {project.title}
+            <span className="text-primary">*</span>
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function ProjectCard({
   project,
-  index,
+  className,
 }: {
   project: Project;
-  index: number;
+  className?: string;
 }) {
-  const [loaded, setLoaded] = useState(false);
   const t = useTranslations("work");
 
   return (
-    <article className="group">
-      <div className="bg-card relative aspect-[404/316] overflow-hidden rounded-lg transition-[border-radius,transform] duration-500 group-hover:rounded-2xl">
-        {!loaded && (
-          <div className="from-card via-muted to-card absolute inset-0 animate-pulse bg-gradient-to-br" />
-        )}
-        <iframe
-          src={behanceEmbed(project.behanceId)}
-          title={project.title}
-          loading="lazy"
-          allow="clipboard-write"
-          referrerPolicy="strict-origin-when-cross-origin"
-          onLoad={() => setLoaded(true)}
-          className={cn(
-            "size-full transition-opacity duration-700",
-            loaded ? "opacity-100" : "opacity-0",
-          )}
+    <a
+      href={behanceUrl(project.behanceId)}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${t("viewOnBehance")}: ${project.title}`}
+      className={cn("group block", className)}
+    >
+      <motion.div
+        initial={{ clipPath: "inset(18% 8% 18% 8%)" }}
+        whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+        viewport={{ once: true, margin: "-10%" }}
+        transition={{ duration: 1.1, ease }}
+        className="overflow-hidden rounded-lg"
+      >
+        <Cover
+          project={project}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="aspect-[4/3] transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
         />
-      </div>
+      </motion.div>
 
-      <div className="border-border mt-4 flex items-start justify-between gap-4 border-t pt-4">
-        <div className="flex gap-4">
-          <span className="text-muted-foreground pt-1 text-xs font-medium tabular-nums">
-            {String(index + 1).padStart(2, "0")}
+      <div className="mt-4 flex items-baseline justify-between gap-4">
+        <h3 className="text-xl font-semibold tracking-tight md:text-2xl">
+          <span className="link-draw group-hover:bg-[length:100%_1px]">
+            {project.title}
           </span>
-          <div>
-            <h3 className="group-hover:text-primary text-xl font-semibold tracking-tight transition-colors md:text-2xl">
-              {project.title}
-            </h3>
-            <p className="text-muted-foreground mt-1 text-sm">
-              {project.client} · {t(`categories.${project.category}`)} ·{" "}
-              {project.year}
-            </p>
-          </div>
-        </div>
-        <a
-          href={behanceUrl(project.behanceId)}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${t("viewOnBehance")}: ${project.title}`}
-          className="border-border hover:bg-primary hover:text-primary-foreground hover:border-primary grid size-10 shrink-0 place-items-center rounded-full border transition-colors duration-300"
-        >
-          <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:rotate-45" />
-        </a>
+        </h3>
+        <ArrowUpRight className="text-primary size-5 shrink-0 -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
       </div>
-    </article>
+      <p className="text-muted-foreground mt-1 text-sm">
+        {t(`categories.${project.category}`)}, {project.year}
+      </p>
+    </a>
   );
 }

@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Bricolage_Grotesque, Instrument_Serif } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 import { MotionConfig } from "motion/react";
 
 import { TRPCReactProvider } from "@/trpc/react";
@@ -12,16 +12,9 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const grotesk = Bricolage_Grotesque({
   subsets: ["latin"],
+  axes: ["opsz", "wdth"],
   display: "swap",
   variable: "--font-grotesk",
-});
-
-const instrument = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-instrument",
 });
 
 export const metadata: Metadata = {
@@ -46,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${grotesk.variable} ${instrument.variable}`}>
+      <body className={grotesk.variable}>
         <a
           href="#main"
           className="bg-primary text-primary-foreground sr-only z-[60] rounded-full px-4 py-2 focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
@@ -57,8 +50,7 @@ export default function RootLayout({
           <LanguageProvider>
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
-              enableSystem
+              defaultTheme="dark"
               disableTransitionOnChange
             >
               <TRPCReactProvider>

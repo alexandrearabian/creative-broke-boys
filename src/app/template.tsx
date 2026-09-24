@@ -3,15 +3,18 @@
 import { motion } from "motion/react";
 import { ease } from "@/components/motion";
 
-// Re-mounts on every navigation, giving each page a soft entrance.
+// Re-mounts on every navigation: a signal-colored curtain lifts off the new page.
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease }}
-    >
+    <>
+      <motion.div
+        aria-hidden
+        className="bg-primary pointer-events-none fixed inset-0 z-[70] origin-top"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        transition={{ duration: 0.7, ease }}
+      />
       {children}
-    </motion.div>
+    </>
   );
 }

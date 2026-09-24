@@ -9,7 +9,7 @@ export function Footer() {
   const t = useTranslations();
   return (
     <footer className="border-border mt-32 border-t">
-      <div className="mx-auto max-w-7xl px-5 pt-16 pb-8 md:px-8">
+      <div className="overflow-hidden px-5 pt-16 pb-8 md:px-8">
         <div className="flex flex-col justify-between gap-10 md:flex-row md:items-end">
           <div className="max-w-sm space-y-4">
             <p className="text-muted-foreground">{t("footer.tagline")}</p>
@@ -33,9 +33,9 @@ export function Footer() {
 
         <p
           aria-hidden
-          className="text-foreground/[0.06] mt-16 text-[15.5vw] leading-[0.8] font-bold tracking-tighter whitespace-nowrap select-none md:text-[13.2vw] xl:text-[11.5rem]"
+          className="display mt-16 text-[22vw] leading-[0.8] tracking-[-0.06em] whitespace-nowrap select-none md:text-[20.5vw]"
         >
-          Broke Boys
+          Broke Boys<span className="text-primary">*</span>
         </p>
 
         <div className="text-muted-foreground mt-8 flex items-center justify-between text-xs">

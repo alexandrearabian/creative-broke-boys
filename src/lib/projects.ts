@@ -6,12 +6,15 @@ export type Project = {
   client: string;
   year: string;
   category: Category;
+  /** Behance cover file name; projects without one get a type-only tile. */
+  cover?: string;
 };
 
-// Order matters: the first three are featured on the home page.
+// Order matters: the home page gallery follows it.
 export const projects: Project[] = [
   {
     behanceId: "216438429",
+    cover: "c04aec216438429.Y3JvcCwxNzkyLDE0MDIsNTQ1LDM5MA.jpg",
     title: "REACCIONES 2024",
     client: "Shitty Hosts · Bronze, Young Lions 2024",
     year: "2024",
@@ -19,6 +22,7 @@ export const projects: Project[] = [
   },
   {
     behanceId: "196556307",
+    cover: "21db2c196556307.Y3JvcCw4MDksNjMyLDAsMA.png",
     title: "Trash Your Playlist",
     client: "Future Lions 2024",
     year: "2024",
@@ -40,6 +44,7 @@ export const projects: Project[] = [
   },
   {
     behanceId: "211154803",
+    cover: "278419211154803.Y3JvcCwxMDgwLDg0NCwwLDExNw.png",
     title: "Grafica",
     client: "Visual identity",
     year: "2024",
@@ -47,6 +52,7 @@ export const projects: Project[] = [
   },
   {
     behanceId: "210503893",
+    cover: "07e871210503893.671232fd628e6.jpg",
     title: "ENTEL",
     client: "Entel",
     year: "2024",
@@ -54,6 +60,7 @@ export const projects: Project[] = [
   },
   {
     behanceId: "208011533",
+    cover: "eda084208011533.Y3JvcCw1NzUzLDQ1MDAsMTEyNSww.jpg",
     title: "Podcast",
     client: "Podcast identity",
     year: "2024",
@@ -61,6 +68,7 @@ export const projects: Project[] = [
   },
   {
     behanceId: "202737175",
+    cover: "c44691202737175.Y3JvcCwxMzgwLDEwODAsMjcwLDA.png",
     title: "Re-connect",
     client: "Digital campaign",
     year: "2024",
@@ -68,6 +76,7 @@ export const projects: Project[] = [
   },
   {
     behanceId: "156726755",
+    cover: "583c99156726755.6904dad0d1def.jpg",
     title: "Say Yes to the Zest",
     client: "William Lawson's",
     year: "2023",
@@ -75,6 +84,7 @@ export const projects: Project[] = [
   },
   {
     behanceId: "168859783",
+    cover: "8d2995168859783.Y3JvcCwzMzY4LDI2MzQsMCww.png",
     title: "Creative Project",
     client: "Design",
     year: "2023",
@@ -82,8 +92,8 @@ export const projects: Project[] = [
   },
 ];
 
-export const behanceEmbed = (id: string) =>
-  `https://www.behance.net/embed/project/${id}?ilo0=1`;
+export const coverUrl = (file: string) =>
+  `https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/${file}`;
 export const behanceUrl = (id: string) =>
   `https://www.behance.net/gallery/${id}`;
 

@@ -41,14 +41,14 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-5 pt-36 md:px-8 md:pt-48">
+    <div className="px-5 pt-36 md:px-8 md:pt-48">
       <header>
         <Reveal>
           <Eyebrow>{t("eyebrow")}</Eyebrow>
         </Reveal>
-        <h1 className="mt-6 text-[clamp(3rem,9vw,8rem)] leading-[0.9] font-bold">
+        <h1 className="display mt-6 text-[clamp(3.5rem,13vw,13rem)] leading-[0.85]">
           <MaskLine delay={0.1}>{t("title")}</MaskLine>
-          <MaskLine delay={0.2} className="serif-accent text-primary">
+          <MaskLine delay={0.2} className="accent-word text-primary">
             {t("accent")}
           </MaskLine>
         </h1>

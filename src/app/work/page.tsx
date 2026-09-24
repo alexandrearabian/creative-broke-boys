@@ -1,11 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useSpring,
+} from "motion/react";
+import { ArrowUpRight } from "lucide-react";
 import { useTranslations } from "@/contexts/LanguageContext";
-import { Eyebrow, MaskLine, Reveal, ease } from "@/components/motion";
-import { ProjectCard } from "@/components/project-card";
-import { projects, type Category } from "@/lib/projects";
+import { Letters, ease } from "@/components/motion";
+import { Cover, ProjectCard } from "@/components/project-card";
+import {
+  behanceUrl,
+  projects,
+  type Category,
+  type Project,
+} from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
 const filters = [
@@ -16,10 +27,86 @@ const filters = [
   "interactive",
 ] as const;
 type Filter = (typeof filters)[number];
+const views = ["grid", "index"] as const;
+
+/** Text rows; the hovered project's cover trails the pointer. */
+function IndexList({ items }: { items: Project[] }) {
+  const t = useTranslations("work");
+  const [hovered, setHovered] = useState<Project | null>(null);
+  const x = useSpring(useMotionValue(0), { stiffness: 250, damping: 28 });
+  const y = useSpring(useMotionValue(0), { stiffness: 250, damping: 28 });
+
+  return (
+    <div
+      onPointerMove={(e) => {
+        x.set(e.clientX);
+        y.set(e.clientY);
+      }}
+      onPointerLeave={() => setHovered(null)}
+    >
+      <ul className="border-t">
+        {items.map((p, i) => (
+          <motion.li
+            key={p.behanceId}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease, delay: i * 0.04 }}
+            className="border-b"
+          >
+            <a
+              href={behanceUrl(p.behanceId)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onPointerEnter={() => setHovered(p)}
+              className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-4 py-5 md:grid-cols-[4rem_1fr_12rem_4rem] md:py-7"
+            >
+              <span className="text-muted-foreground text-sm tabular-nums">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="display group-hover:text-primary text-3xl tracking-[-0.04em] transition-[color,transform] duration-500 group-hover:translate-x-3 md:text-6xl">
+                {p.title}
+              </span>
+              <span className="text-muted-foreground hidden text-sm md:block">
+                {t(`categories.${p.category}`)}
+              </span>
+              <span className="text-muted-foreground flex items-center justify-end gap-2 text-sm tabular-nums">
+                {p.year}
+                <ArrowUpRight className="text-primary size-4 opacity-0 transition-opacity group-hover:opacity-100" />
+              </span>
+            </a>
+          </motion.li>
+        ))}
+      </ul>
+
+      {/* Pointer-only preview; touch users get the plain list. */}
+      <motion.div
+        aria-hidden
+        style={{ x, y }}
+        className="pointer-events-none fixed top-0 left-0 z-30 hidden [@media(hover:hover)]:block"
+      >
+        <AnimatePresence>
+          {hovered && (
+            <motion.div
+              key={hovered.behanceId}
+              initial={{ opacity: 0, scale: 0.6, rotate: -6 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, scale: 0.6 }}
+              transition={{ duration: 0.4, ease }}
+              className="absolute -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg"
+            >
+              <Cover project={hovered} sizes="360px" className="h-60 w-80" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function WorkPage() {
   const t = useTranslations("work");
   const [filter, setFilter] = useState<Filter>("all");
+  const [view, setView] = useState<(typeof views)[number]>("grid");
 
   const visible = projects.filter(
     (p) => filter === "all" || p.category === (filter as Category),
@@ -30,31 +117,16 @@ export default function WorkPage() {
       : projects.filter((p) => p.category === f).length;
 
   return (
-    <div className="mx-auto max-w-7xl px-5 pt-36 md:px-8 md:pt-48">
-      <header className="grid gap-10 md:grid-cols-12">
-        <div className="md:col-span-8">
-          <Reveal>
-            <Eyebrow>{t("eyebrow")}</Eyebrow>
-          </Reveal>
-          <h1 className="mt-6 text-[clamp(3rem,9vw,8rem)] leading-[0.9] font-bold">
-            <MaskLine delay={0.1}>{t("title")}</MaskLine>
-            <MaskLine delay={0.2} className="serif-accent text-primary">
-              {t("accent")}
-            </MaskLine>
-          </h1>
-        </div>
-        <Reveal delay={0.3} className="self-end md:col-span-4 md:col-start-9">
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            {t("description")}
-          </p>
-        </Reveal>
-      </header>
+    <div className="px-5 pt-32 md:px-8 md:pt-40">
+      <h1 className="display text-[clamp(4rem,22vw,22rem)] leading-[0.8] tracking-[-0.06em]">
+        <Letters text={t("title")} delay={0.05} />
+        <sup className="text-primary ml-2 align-super text-2xl font-medium tracking-normal tabular-nums md:text-5xl">
+          {projects.length}
+        </sup>
+      </h1>
 
-      <Reveal delay={0.4}>
-        <div
-          role="tablist"
-          className="border-border mt-16 flex gap-1 overflow-x-auto border-y py-3 md:mt-24"
-        >
+      <div className="bg-background/70 sticky top-0 z-20 -mx-5 mt-10 flex items-center justify-between gap-4 px-5 py-3 backdrop-blur-xl md:-mx-8 md:mt-16 md:px-8">
+        <div role="tablist" className="flex gap-1 overflow-x-auto">
           {filters.map((f) => (
             <button
               key={f}
@@ -82,27 +154,39 @@ export default function WorkPage() {
             </button>
           ))}
         </div>
-      </Reveal>
-
-      <motion.div
-        layout
-        className="mt-16 grid gap-16 md:grid-cols-2 md:gap-x-10 md:gap-y-20 md:[&>*:nth-child(even)]:translate-y-24"
-      >
-        <AnimatePresence mode="popLayout">
-          {visible.map((project, i) => (
-            <motion.div
-              key={project.behanceId}
-              layout
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.6, ease, delay: i * 0.05 }}
+        <div className="hidden shrink-0 gap-1 sm:flex">
+          {views.map((v) => (
+            <button
+              key={v}
+              onClick={() => setView(v)}
+              aria-pressed={view === v}
+              className={cn(
+                "rounded-full border px-4 py-2 text-sm font-medium capitalize transition-colors",
+                view === v
+                  ? "border-foreground"
+                  : "text-muted-foreground hover:text-foreground border-transparent",
+              )}
             >
-              <ProjectCard project={project} index={i} />
-            </motion.div>
+              {t(`views.${v}`)}
+            </button>
           ))}
-        </AnimatePresence>
-      </motion.div>
+        </div>
+      </div>
+
+      <div className="mt-10 md:mt-16">
+        {view === "index" ? (
+          <IndexList key={filter} items={visible} />
+        ) : (
+          <div
+            key={filter}
+            className="grid gap-14 md:grid-cols-2 md:gap-x-8 md:gap-y-24 md:[&>*:nth-child(even)]:mt-40"
+          >
+            {visible.map((p) => (
+              <ProjectCard key={p.behanceId} project={p} />
+            ))}
+          </div>
+        )}
+      </div>
 
       {visible.length === 0 && (
         <p className="text-muted-foreground py-24 text-center">{t("empty")}</p>

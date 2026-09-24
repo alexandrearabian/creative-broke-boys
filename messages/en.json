@@ -15,30 +15,16 @@
     "backToTop": "Back to top"
   },
   "home": {
-    "eyebrow": "Creative duo · Campaigns, branding, digital",
-    "heroLine1": "Two creatives.",
-    "heroLine2": "Big ideas,",
-    "heroAccent": "small budgets.",
-    "heroDescription": "We're a copy and art team. We make campaigns that get people talking, and we've learned to do it without waiting for a big budget to show up.",
+    "heroDescription": "Copy and art duo. Campaigns people talk about, made on small budgets.",
     "cta": "See the work",
-    "ctaSecondary": "Say hello",
     "selectedTitle": "Selected work",
     "viewAll": "All projects",
-    "duoEyebrow": "The duo",
-    "duoTitle": "One writes, one designs.",
-    "duoAccent": "Both argue.",
-    "duoBody": "Every idea gets pulled apart by two people before it reaches you. What survives is sharper, simpler and harder to ignore.",
-    "duoLink": "More about us",
     "ctaTitle": "Got a brief?",
-    "ctaAccent": "Or just a hunch?",
-    "ctaBody": "Tell us what you're working on. We read every message.",
-    "ctaButton": "Start a project"
+    "ctaAccent": "Or a hunch?",
+    "ctaButton": "Get in touch"
   },
   "work": {
-    "eyebrow": "Portfolio",
-    "title": "Work that",
-    "accent": "got noticed.",
-    "description": "Campaigns, brand work and digital pieces, from Young Lions entries to briefs for banks and telcos.",
+    "title": "Work",
     "all": "All",
     "viewOnBehance": "View on Behance",
     "empty": "Nothing in this category yet.",
@@ -47,6 +33,10 @@
       "branding": "Branding",
       "digital": "Digital",
       "interactive": "Interactive"
+    },
+    "views": {
+      "grid": "Grid",
+      "index": "Index"
     }
   },
   "about": {
@@ -54,10 +44,6 @@
     "title": "Broke on budget.",
     "accent": "Rich in ideas.",
     "description": "Creative Broke Boys is a two-person creative team. We work on campaigns, brand identities and digital pieces, and we handle the whole thing ourselves: strategy, copy, art and production.",
-    "storyTitle": "Our story",
-    "story1": "We started with a simple conviction: the most interesting work often comes from constraints, not from unlimited resources.",
-    "story2": "The best ideas don't come from the biggest budgets. They come from understanding people, taking a clear position and being willing to push an idea further than feels comfortable.",
-    "story3": "Today we work with brands and people who agree. We're broke, sure. We're also rewriting what a small team can pull off.",
     "duoTitle": "The two of us",
     "processTitle": "How we work",
     "steps": {

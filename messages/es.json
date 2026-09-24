@@ -15,30 +15,16 @@
     "backToTop": "Volver arriba"
   },
   "home": {
-    "eyebrow": "Dupla creativa · Campañas, branding, digital",
-    "heroLine1": "Dos creativos.",
-    "heroLine2": "Ideas grandes,",
-    "heroAccent": "presupuestos chicos.",
-    "heroDescription": "Somos una dupla de redacción y arte. Hacemos campañas que dan que hablar, y aprendimos a hacerlo sin esperar a que llegue un presupuesto enorme.",
+    "heroDescription": "Dupla de redacción y arte. Campañas de las que se habla, hechas con presupuestos chicos.",
     "cta": "Ver el trabajo",
-    "ctaSecondary": "Escríbenos",
     "selectedTitle": "Trabajo seleccionado",
     "viewAll": "Todos los proyectos",
-    "duoEyebrow": "La dupla",
-    "duoTitle": "Uno escribe, otro diseña.",
-    "duoAccent": "Los dos discuten.",
-    "duoBody": "Cada idea la desarman dos personas antes de llegar a ti. Lo que sobrevive es más filoso, más simple y más difícil de ignorar.",
-    "duoLink": "Más sobre nosotros",
     "ctaTitle": "¿Tienes un brief?",
-    "ctaAccent": "¿O solo una corazonada?",
-    "ctaBody": "Cuéntanos en qué estás trabajando. Leemos todos los mensajes.",
-    "ctaButton": "Empezar un proyecto"
+    "ctaAccent": "¿O una corazonada?",
+    "ctaButton": "Contáctanos"
   },
   "work": {
-    "eyebrow": "Portafolio",
-    "title": "Trabajo que",
-    "accent": "se hizo notar.",
-    "description": "Campañas, marcas y piezas digitales, desde entradas a Young Lions hasta briefs para bancos y telcos.",
+    "title": "Trabajo",
     "all": "Todo",
     "viewOnBehance": "Ver en Behance",
     "empty": "Todavía no hay nada en esta categoría.",
@@ -47,6 +33,10 @@
       "branding": "Branding",
       "digital": "Digital",
       "interactive": "Interactivo"
+    },
+    "views": {
+      "grid": "Grilla",
+      "index": "Índice"
     }
   },
   "about": {
@@ -54,10 +44,6 @@
     "title": "Cortos de presupuesto.",
     "accent": "Llenos de ideas.",
     "description": "Creative Broke Boys es una dupla creativa. Trabajamos en campañas, identidades de marca y piezas digitales, y nos encargamos de todo: estrategia, redacción, arte y producción.",
-    "storyTitle": "Nuestra historia",
-    "story1": "Partimos de una convicción simple: el trabajo más interesante suele nacer de las restricciones, no de los recursos ilimitados.",
-    "story2": "Las mejores ideas no vienen de los presupuestos más grandes. Vienen de entender a las personas, tomar una postura clara y atreverse a empujar una idea más allá de lo cómodo.",
-    "story3": "Hoy trabajamos con marcas y personas que piensan igual. Somos pobres, sí. También estamos redefiniendo lo que puede lograr un equipo chico.",
     "duoTitle": "Nosotros dos",
     "processTitle": "Cómo trabajamos",
     "steps": {

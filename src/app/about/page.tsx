@@ -22,15 +22,15 @@ export default function AboutPage() {
   const t = useTranslations("about");
 
   return (
-    <div className="mx-auto max-w-7xl px-5 pt-36 md:px-8 md:pt-48">
+    <div className="px-5 pt-36 md:px-8 md:pt-48">
       {/* Hero */}
       <header>
         <Reveal>
           <Eyebrow>{t("eyebrow")}</Eyebrow>
         </Reveal>
-        <h1 className="mt-6 text-[clamp(3rem,9vw,8rem)] leading-[0.9] font-bold">
+        <h1 className="display mt-6 text-[clamp(3.5rem,13vw,13rem)] leading-[0.85]">
           <MaskLine delay={0.1}>{t("title")}</MaskLine>
-          <MaskLine delay={0.2} className="serif-accent text-primary">
+          <MaskLine delay={0.2} className="accent-word text-primary">
             {t("accent")}
           </MaskLine>
         </h1>
@@ -41,35 +41,9 @@ export default function AboutPage() {
         </Reveal>
       </header>
 
-      {/* Story */}
-      <section className="mt-32 grid gap-10 md:mt-48 md:grid-cols-12">
-        <div className="md:col-span-4">
-          <h2 className="text-4xl font-bold md:sticky md:top-32 md:text-5xl">
-            <MaskLine>{t("storyTitle")}</MaskLine>
-          </h2>
-        </div>
-        <ol className="space-y-12 md:col-span-7 md:col-start-6">
-          {(["story1", "story2", "story3"] as const).map((k, i) => (
-            <Reveal
-              as="li"
-              key={k}
-              delay={i * 0.08}
-              className="border-border flex gap-6 border-t pt-6"
-            >
-              <span className="text-primary serif-accent text-2xl">
-                {i + 1}.
-              </span>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                {t(k)}
-              </p>
-            </Reveal>
-          ))}
-        </ol>
-      </section>
-
       {/* Duo */}
       <section className="mt-32 md:mt-48">
-        <h2 className="mb-12 text-4xl font-bold md:text-5xl">
+        <h2 className="display mb-12 text-5xl md:text-7xl">
           <MaskLine>{t("duoTitle")}</MaskLine>
         </h2>
         <div className="grid gap-6 md:grid-cols-2">
@@ -86,7 +60,7 @@ export default function AboutPage() {
                 <h3 className="mt-16 text-3xl font-bold md:text-4xl">
                   {m.name}
                 </h3>
-                <p className="serif-accent text-primary mt-1 text-2xl">
+                <p className="accent-word text-primary mt-1 text-2xl">
                   {t(`roles.${m.role}`)}
                 </p>
                 <p className="text-muted-foreground mt-6 max-w-sm leading-relaxed">
@@ -106,7 +80,7 @@ export default function AboutPage() {
 
       {/* Process */}
       <section className="mt-32 md:mt-48">
-        <h2 className="mb-12 text-4xl font-bold md:text-5xl">
+        <h2 className="display mb-12 text-5xl md:text-7xl">
           <MaskLine>{t("processTitle")}</MaskLine>
         </h2>
         <ol>
@@ -133,9 +107,9 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="border-border mt-32 border-t pt-24 md:mt-48">
-        <h2 className="text-[clamp(3rem,8vw,7rem)] leading-[0.9] font-bold">
+        <h2 className="display text-[clamp(3.5rem,11vw,11rem)] leading-[0.85]">
           <MaskLine>{t("ctaTitle")}</MaskLine>
-          <MaskLine delay={0.1} className="serif-accent text-primary">
+          <MaskLine delay={0.1} className="accent-word text-primary">
             {t("ctaAccent")}
           </MaskLine>
         </h2>
