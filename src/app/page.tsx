@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
+  animate,
   motion,
   useReducedMotion,
   useScroll,
@@ -137,25 +138,116 @@ function Hero() {
   );
 }
 
+const instant = (top: number) => window.scrollTo({ top, behavior: "instant" });
+
 /**
- * Desktop: vertical scroll drives a horizontal pan through every project.
- * Phones and reduced motion: a native swipe carousel that snaps card to card.
+ * Lets sideways gestures drive the pan too: a horizontal trackpad or
+ * shift-wheel scroll, or a sideways touch swipe, is turned into page scroll,
+ * which the pan already maps 1:1 to horizontal movement.
+ */
+function useSideScroll(
+  section: React.RefObject<HTMLElement | null>,
+  el: React.RefObject<HTMLDivElement | null>,
+  distance: number,
+) {
+  useEffect(() => {
+    const node = el.current;
+    if (!distance || !node) return;
+    // Keep gestures inside the pan's scroll range.
+    const clamp = (y: number) => {
+      const start =
+        (section.current?.getBoundingClientRect().top ?? 0) + window.scrollY;
+      return Math.min(start + distance, Math.max(start, y));
+    };
+
+    let dragging = false;
+    let moved = false;
+    let startX = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let velocity = 0;
+    let glide: ReturnType<typeof animate> | undefined;
+
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault(); // also stops the browser's back/forward swipe
+      instant(clamp(window.scrollY + e.deltaX));
+    };
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") return;
+      glide?.stop();
+      dragging = true;
+      moved = false;
+      startX = lastX = e.clientX;
+      lastT = e.timeStamp;
+      velocity = 0;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX;
+      if (Math.abs(e.clientX - startX) > 8) moved = true;
+      instant(clamp(window.scrollY - dx));
+      velocity = dx / Math.max(1, e.timeStamp - lastT);
+      lastX = e.clientX;
+      lastT = e.timeStamp;
+    };
+    const onUp = () => {
+      if (!dragging) return;
+      dragging = false;
+      // Carry the swipe's momentum a little further, like a native fling.
+      glide = animate(window.scrollY, clamp(window.scrollY - velocity * 350), {
+        duration: 0.8,
+        ease,
+        onUpdate: instant,
+      });
+    };
+    const onCancel = () => (dragging = false);
+    // A swipe that started on a card shouldn't open it.
+    const onClick = (e: MouseEvent) => {
+      if (!moved) return;
+      e.preventDefault();
+      e.stopPropagation();
+      moved = false;
+    };
+
+    node.addEventListener("wheel", onWheel, { passive: false });
+    node.addEventListener("pointerdown", onDown);
+    node.addEventListener("pointermove", onMove);
+    node.addEventListener("pointerup", onUp);
+    node.addEventListener("pointercancel", onCancel);
+    node.addEventListener("click", onClick, true);
+    return () => {
+      glide?.stop();
+      node.removeEventListener("wheel", onWheel);
+      node.removeEventListener("pointerdown", onDown);
+      node.removeEventListener("pointermove", onMove);
+      node.removeEventListener("pointerup", onUp);
+      node.removeEventListener("pointercancel", onCancel);
+      node.removeEventListener("click", onClick, true);
+    };
+  }, [section, el, distance]);
+}
+
+/**
+ * Vertical scroll drives a horizontal pan through every project; sideways
+ * swipes and trackpad scrolls move it as well. Reduced motion gets a native
+ * swipe carousel that snaps card to card.
  */
 function Gallery() {
   const t = useTranslations("home");
   const tw = useTranslations("work");
   const section = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const [distance, setDistance] = useState(0);
 
   useLayoutEffect(() => {
-    const desktop = window.matchMedia("(min-width: 768px)");
     const measure = () =>
       setDistance(
-        desktop.matches && !reduce
-          ? Math.max(0, (track.current?.scrollWidth ?? 0) - window.innerWidth)
-          : 0,
+        reduce
+          ? 0
+          : Math.max(0, (track.current?.scrollWidth ?? 0) - window.innerWidth),
       );
     measure();
     window.addEventListener("resize", measure);
@@ -170,6 +262,7 @@ function Gallery() {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
   const pan = distance > 0;
+  useSideScroll(section, stage, distance);
   const title = (
     <>
       {t("selectedTitle")}
@@ -184,18 +277,19 @@ function Gallery() {
       ref={section}
       aria-label={t("selectedTitle")}
       style={pan ? { height: `calc(100dvh + ${distance}px)` } : undefined}
-      className="relative py-16 md:py-0"
+      className="relative"
     >
-      <h2 className="display mb-8 px-5 text-6xl leading-[0.85] md:hidden">
-        {title}
-      </h2>
       <div
+        ref={stage}
         className={
           pan
-            ? "sticky top-0 flex h-[100dvh] flex-col justify-center overflow-hidden"
-            : "snap-x snap-mandatory scroll-px-5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] md:scroll-px-8 md:py-24"
+            ? "sticky top-0 flex h-[100dvh] touch-pan-y flex-col justify-center overflow-hidden"
+            : "snap-x snap-mandatory scroll-px-5 overflow-x-auto overscroll-x-contain py-16 [scrollbar-width:none] md:scroll-px-8 md:py-24"
         }
       >
+        <h2 className="display mb-8 px-5 text-6xl leading-[0.85] md:hidden">
+          {title}
+        </h2>
         <motion.div
           ref={track}
           style={{ x }}
@@ -247,7 +341,7 @@ function Gallery() {
         {pan && (
           <motion.div
             style={{ scaleX: progress }}
-            className="bg-primary absolute inset-x-8 bottom-8 h-px origin-left"
+            className="bg-primary absolute inset-x-5 bottom-8 h-px origin-left md:inset-x-8"
           />
         )}
       </div>
