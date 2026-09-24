@@ -126,7 +126,10 @@ export default function WorkPage() {
       </h1>
 
       <div className="bg-background/70 sticky top-0 z-20 -mx-5 mt-10 flex items-center justify-between gap-4 px-5 py-3 backdrop-blur-xl md:-mx-8 md:mt-16 md:px-8">
-        <div role="tablist" className="flex gap-1 overflow-x-auto">
+        <div
+          role="tablist"
+          className="-mr-5 flex gap-1 overflow-x-auto [mask-image:linear-gradient(to_right,black_80%,transparent)] pr-8 [scrollbar-width:none] sm:mr-0 sm:[mask-image:none] sm:pr-0"
+        >
           {filters.map((f) => (
             <button
               key={f}

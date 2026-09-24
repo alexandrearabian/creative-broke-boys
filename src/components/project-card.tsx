@@ -58,7 +58,10 @@ export function ProjectCard({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${t("viewOnBehance")}: ${project.title}`}
-      className={cn("group block", className)}
+      className={cn(
+        "group block transition-transform duration-300 active:scale-[0.98]",
+        className,
+      )}
     >
       <motion.div
         initial={{ clipPath: "inset(18% 8% 18% 8%)" }}

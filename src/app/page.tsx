@@ -26,8 +26,8 @@ import { behanceUrl, clients, projects } from "@/lib/projects";
 
 const withCovers = projects.filter((p) => p.cover);
 
-/** Pill-shaped window in the headline that flips through project covers. */
-function CoverPill() {
+/** Index of the hero cover on show; advances on a timer unless motion is reduced. */
+function useCoverCycle() {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
 
@@ -40,38 +40,36 @@ function CoverPill() {
     return () => clearInterval(id);
   }, [reduce]);
 
+  return i;
+}
+
+/** Stacked covers that slide up to the next one whenever `index` changes. */
+function CoverFlip({ index, sizes }: { index: number; sizes: string }) {
   return (
-    <motion.span
-      initial={{ clipPath: "inset(0% 50% 0% 50% round 999px)" }}
-      animate={{ clipPath: "inset(0% 0% 0% 0% round 999px)" }}
-      transition={{ duration: 1.1, ease, delay: 0.5 }}
-      className="relative mx-[0.08em] inline-block h-[0.72em] w-[1em] shrink-0 overflow-hidden rounded-full align-[0.02em] md:w-[1.5em]"
-      aria-hidden
-    >
-      <AnimatePresence initial={false}>
-        <motion.span
-          key={i}
-          className="absolute inset-0"
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.6, ease }}
-        >
-          <Cover
-            project={withCovers[i]!}
-            sizes="240px"
-            priority={i === 0}
-            className="size-full"
-          />
-        </motion.span>
-      </AnimatePresence>
-    </motion.span>
+    <AnimatePresence initial={false}>
+      <motion.span
+        key={index}
+        className="absolute inset-0"
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "-100%" }}
+        transition={{ duration: 0.6, ease }}
+      >
+        <Cover
+          project={withCovers[index]!}
+          sizes={sizes}
+          priority={index === 0}
+          className="size-full"
+        />
+      </motion.span>
+    </AnimatePresence>
   );
 }
 
 function Hero() {
   const t = useTranslations("home");
   const ref = useRef<HTMLElement>(null);
+  const cover = useCoverCycle();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -83,8 +81,19 @@ function Hero() {
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[100dvh] flex-col justify-end overflow-hidden px-5 pt-24 pb-10 md:px-8 md:pb-12"
+      className="relative flex min-h-[100dvh] flex-col justify-end overflow-hidden px-5 pt-20 pb-8 md:px-8 md:pt-24 md:pb-12"
     >
+      {/* Phones: the covers fill the space above the headline instead of the inline pill. */}
+      <motion.div
+        aria-hidden
+        initial={{ clipPath: "inset(100% 0% 0% 0% round 0.5rem)" }}
+        animate={{ clipPath: "inset(0% 0% 0% 0% round 0.5rem)" }}
+        transition={{ duration: 1.1, ease, delay: 0.3 }}
+        className="relative mb-6 min-h-40 flex-1 overflow-hidden md:hidden"
+      >
+        <CoverFlip index={cover} sizes="100vw" />
+      </motion.div>
+
       <h1 className="display text-[21vw] leading-[0.82] tracking-[-0.06em] md:text-[min(17.5vw,17rem)]">
         <motion.span style={{ x: left }} className="block">
           <Letters text="Creative" delay={0.1} />
@@ -93,7 +102,15 @@ function Hero() {
           style={{ x: right }}
           className="flex items-center justify-end"
         >
-          <CoverPill />
+          <motion.span
+            aria-hidden
+            initial={{ clipPath: "inset(0% 50% 0% 50% round 999px)" }}
+            animate={{ clipPath: "inset(0% 0% 0% 0% round 999px)" }}
+            transition={{ duration: 1.1, ease, delay: 0.5 }}
+            className="relative mx-[0.08em] hidden h-[0.72em] w-[1.5em] shrink-0 overflow-hidden rounded-full md:inline-block"
+          >
+            <CoverFlip index={cover} sizes="240px" />
+          </motion.span>
           <Letters text="Broke" delay={0.25} />
         </motion.span>
         <motion.span style={{ x: left }} className="block">
@@ -104,9 +121,9 @@ function Hero() {
 
       <Reveal
         delay={0.9}
-        className="mt-10 flex flex-wrap items-end justify-between gap-8 md:mt-14"
+        className="mt-6 flex flex-wrap items-end justify-between gap-6 md:mt-14 md:gap-8"
       >
-        <p className="text-muted-foreground max-w-xs text-lg leading-snug">
+        <p className="text-muted-foreground max-w-xs text-base leading-snug md:text-lg">
           {t("heroDescription")}
         </p>
         <Magnetic>
@@ -120,7 +137,10 @@ function Hero() {
   );
 }
 
-/** Vertical scroll drives a horizontal pan through every project. */
+/**
+ * Desktop: vertical scroll drives a horizontal pan through every project.
+ * Phones and reduced motion: a native swipe carousel that snaps card to card.
+ */
 function Gallery() {
   const t = useTranslations("home");
   const tw = useTranslations("work");
@@ -130,14 +150,17 @@ function Gallery() {
   const [distance, setDistance] = useState(0);
 
   useLayoutEffect(() => {
+    const desktop = window.matchMedia("(min-width: 768px)");
     const measure = () =>
       setDistance(
-        Math.max(0, (track.current?.scrollWidth ?? 0) - window.innerWidth),
+        desktop.matches && !reduce
+          ? Math.max(0, (track.current?.scrollWidth ?? 0) - window.innerWidth)
+          : 0,
       );
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, []);
+  }, [reduce]);
 
   const { scrollYProgress } = useScroll({
     target: section,
@@ -146,32 +169,40 @@ function Gallery() {
   const x = useTransform(scrollYProgress, (p) => -p * distance);
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
-  const pan = !reduce;
+  const pan = distance > 0;
+  const title = (
+    <>
+      {t("selectedTitle")}
+      <sup className="text-primary ml-2 align-super text-lg font-medium tracking-normal tabular-nums md:text-2xl">
+        {projects.length}
+      </sup>
+    </>
+  );
 
   return (
     <section
       ref={section}
       aria-label={t("selectedTitle")}
       style={pan ? { height: `calc(100dvh + ${distance}px)` } : undefined}
-      className="relative"
+      className="relative py-16 md:py-0"
     >
+      <h2 className="display mb-8 px-5 text-6xl leading-[0.85] md:hidden">
+        {title}
+      </h2>
       <div
         className={
           pan
             ? "sticky top-0 flex h-[100dvh] flex-col justify-center overflow-hidden"
-            : "overflow-x-auto py-24"
+            : "snap-x snap-mandatory scroll-px-5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] md:scroll-px-8 md:py-24"
         }
       >
         <motion.div
           ref={track}
-          style={pan ? { x } : undefined}
-          className="flex w-max items-end gap-6 px-5 md:gap-10 md:px-8"
+          style={{ x }}
+          className="flex w-max items-end gap-4 px-5 md:gap-10 md:px-8"
         >
-          <h2 className="display text-[clamp(3rem,9vw,8rem)] leading-[0.85] md:pr-10">
-            {t("selectedTitle")}
-            <sup className="text-primary ml-2 align-super text-lg font-medium tracking-normal tabular-nums md:text-2xl">
-              {projects.length}
-            </sup>
+          <h2 className="display hidden text-[clamp(3rem,9vw,8rem)] leading-[0.85] md:block md:pr-10">
+            {title}
           </h2>
 
           {projects.map((p, i) => (
@@ -181,20 +212,20 @@ function Gallery() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${tw("viewOnBehance")}: ${p.title}`}
-              className={`group block shrink-0 ${i % 2 ? "md:mb-16" : ""}`}
+              className={`group block shrink-0 snap-start transition-transform duration-300 active:scale-[0.98] ${i % 2 ? "md:mb-16" : ""}`}
             >
               <div className="overflow-hidden rounded-lg">
                 <Cover
                   project={p}
-                  sizes="(min-width: 768px) 60vw, 85vw"
-                  className="h-[52dvh] w-[85vw] transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05] md:aspect-[4/3] md:h-[60dvh] md:w-auto"
+                  sizes="(min-width: 768px) 60vw, 82vw"
+                  className="aspect-[4/3] w-[82vw] transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05] md:h-[60dvh] md:w-auto"
                 />
               </div>
-              <div className="mt-4 flex items-baseline gap-3">
+              <div className="mt-3 flex items-baseline gap-3 md:mt-4">
                 <span className="text-muted-foreground text-sm tabular-nums">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="text-xl font-semibold tracking-tight md:text-3xl">
+                <h3 className="max-w-[70vw] truncate text-lg font-semibold tracking-tight md:max-w-none md:text-3xl">
                   {p.title}
                 </h3>
                 <ArrowUpRight className="text-primary size-5 shrink-0 self-center opacity-0 transition-opacity group-hover:opacity-100" />
@@ -204,11 +235,11 @@ function Gallery() {
 
           <Link
             href="/work"
-            className="group text-foreground hover:bg-primary hover:text-primary-foreground grid h-[52dvh] w-[60vw] shrink-0 place-items-center rounded-lg border transition-colors duration-500 md:h-[60dvh] md:w-[28vw]"
+            className="group text-foreground hover:bg-primary hover:text-primary-foreground active:bg-primary active:text-primary-foreground mb-10 grid h-[61.5vw] w-[50vw] shrink-0 snap-start place-items-center rounded-lg border transition-colors duration-500 md:mb-0 md:h-[60dvh] md:w-[28vw]"
           >
-            <span className="flex items-center gap-3 text-2xl font-semibold tracking-tight md:text-4xl">
+            <span className="flex items-center gap-2 text-xl font-semibold tracking-tight md:gap-3 md:text-4xl">
               {t("viewAll")}
-              <ArrowUpRight className="size-8 transition-transform duration-500 group-hover:rotate-45" />
+              <ArrowUpRight className="size-6 transition-transform duration-500 group-hover:rotate-45 md:size-8" />
             </span>
           </Link>
         </motion.div>
@@ -216,7 +247,7 @@ function Gallery() {
         {pan && (
           <motion.div
             style={{ scaleX: progress }}
-            className="bg-primary absolute inset-x-5 bottom-8 h-px origin-left md:inset-x-8"
+            className="bg-primary absolute inset-x-8 bottom-8 h-px origin-left"
           />
         )}
       </div>

@@ -13,6 +13,7 @@ import {
 import { Moon, Sun } from "lucide-react";
 import { useLanguage, useTranslations } from "@/contexts/LanguageContext";
 import { ease } from "@/components/motion";
+import { EMAIL } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
 function ThemeToggle() {
@@ -179,7 +180,7 @@ export function Navbar() {
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.6, ease }}
           >
-            <ul className="space-y-2">
+            <ul>
               {navItems.map((item, i) => (
                 <li key={item.href} className="overflow-hidden">
                   <motion.div
@@ -192,7 +193,7 @@ export function Navbar() {
                       href={item.href}
                       onClick={() => setOpen(false)}
                       className={cn(
-                        "display block text-7xl",
+                        "display block py-1 text-[28vw] leading-[0.85] active:opacity-60",
                         pathname === item.href && "text-primary",
                       )}
                     >
@@ -207,16 +208,24 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ delay: 0.4 }}
-              className="flex items-center justify-between"
+              className="space-y-6"
             >
-              <p className="text-muted-foreground flex items-center gap-2 text-sm">
-                <span className="relative flex size-2">
-                  <span className="bg-primary absolute inline-flex size-full animate-ping rounded-full opacity-60" />
-                  <span className="bg-primary relative inline-flex size-2 rounded-full" />
-                </span>
-                {t("available")}
-              </p>
-              <LanguageToggle />
+              <a
+                href={`mailto:${EMAIL}`}
+                className="block text-lg font-semibold break-all"
+              >
+                {EMAIL}
+              </a>
+              <div className="flex items-center justify-between">
+                <p className="text-muted-foreground flex items-center gap-2 text-sm">
+                  <span className="relative flex size-2">
+                    <span className="bg-primary absolute inline-flex size-full animate-ping rounded-full opacity-60" />
+                    <span className="bg-primary relative inline-flex size-2 rounded-full" />
+                  </span>
+                  {t("available")}
+                </p>
+                <LanguageToggle />
+              </div>
             </motion.div>
           </motion.div>
         )}
